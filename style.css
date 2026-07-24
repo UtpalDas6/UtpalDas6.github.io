@@ -4,19 +4,19 @@
    ============================================================ */
 
 :root {
-  /* Nord — arcticicestudio.github.io/nord */
-  --bg: #2e3440;
-  --bg-raised: #3b4252;
-  --bg-raised-2: #434c5e;
-  --border: rgba(216, 222, 233, 0.1);
-  --border-strong: rgba(216, 222, 233, 0.2);
-  --text: #e5e9f0;
-  --text-dim: #8b98ac;
-  --accent: #88c0d0;
-  --accent-bright: #a3d3de;
-  --accent-dim: #4c6b74;
-  --accent-soft: rgba(136, 192, 208, 0.12);
-  --ok: #a3be8c;
+  /* Tokyo Night — github.com/enkia/tokyo-night-vscode-theme */
+  --bg: #1a1b26;
+  --bg-raised: #24283b;
+  --bg-raised-2: #292e42;
+  --border: rgba(192, 202, 245, 0.1);
+  --border-strong: rgba(192, 202, 245, 0.2);
+  --text: #c0caf5;
+  --text-dim: #a9b1d6;
+  --accent: #7aa2f7;
+  --accent-bright: #9db8fa;
+  --accent-dim: #3d59a1;
+  --accent-soft: rgba(122, 162, 247, 0.12);
+  --ok: #9ece6a;
 
   --font-mono: ui-monospace, "JetBrains Mono", "Fira Code", "SFMono-Regular", Menlo, Consolas,
     "Liberation Mono", monospace;
@@ -111,7 +111,7 @@ h4 {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: rgba(46, 52, 64, 0.88);
+  background: rgba(26, 27, 38, 0.88);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
 }
@@ -475,7 +475,7 @@ h4 {
 
 .badge--live {
   color: var(--ok);
-  border-color: rgba(163, 190, 140, 0.35);
+  border-color: rgba(158, 206, 106, 0.35);
 }
 
 .grid {
