@@ -331,6 +331,8 @@ h4 {
 }
 
 .todo-item {
+  position: relative;
+  padding-left: 26px;
   font-family: var(--font-sans);
   font-size: clamp(1rem, 2vw, 1.05rem);
   margin: 5px 0;
@@ -338,9 +340,11 @@ h4 {
 }
 
 .todo-check {
+  position: absolute;
+  left: 0;
+  top: 0;
   color: var(--ok);
   font-family: var(--font-mono);
-  margin-right: 9px;
 }
 
 .term__name {
