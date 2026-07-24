@@ -4,17 +4,18 @@
    ============================================================ */
 
 :root {
-  --bg: #15120f;
-  --bg-raised: #1e1a16;
-  --bg-raised-2: #272019;
-  --border: rgba(237, 231, 221, 0.12);
-  --border-strong: rgba(237, 231, 221, 0.22);
-  --text: #ede7dd;
-  --text-dim: #9c9284;
-  --accent: #f2a93b;
-  --accent-dim: #7a5a22;
-  --accent-soft: rgba(242, 169, 59, 0.12);
-  --ok: #6fcf97;
+  --bg: #0b2027;
+  --bg-raised: #12313a;
+  --bg-raised-2: #193e48;
+  --border: rgba(159, 189, 192, 0.12);
+  --border-strong: rgba(159, 189, 192, 0.24);
+  --text: #cfe3e3;
+  --text-dim: #7d9fa4;
+  --accent: #57c7b8;
+  --accent-bright: #79d9cb;
+  --accent-dim: #2b6b62;
+  --accent-soft: rgba(87, 199, 184, 0.12);
+  --ok: #8fd19e;
 
   --font-mono: ui-monospace, "JetBrains Mono", "Fira Code", "SFMono-Regular", Menlo, Consolas,
     "Liberation Mono", monospace;
@@ -58,7 +59,7 @@ body {
 
 ::selection {
   background: var(--accent);
-  color: #15120f;
+  color: var(--bg);
 }
 
 a {
@@ -298,13 +299,13 @@ h4 {
 .btn--primary {
   background: var(--accent);
   border-color: var(--accent);
-  color: #15120f;
+  color: var(--bg);
   font-weight: 700;
 }
 
 .btn--primary:hover {
-  background: #ffbe5c;
-  border-color: #ffbe5c;
+  background: var(--accent-bright);
+  border-color: var(--accent-bright);
 }
 
 /* ---------- sections, reveal ---------- */
@@ -440,7 +441,7 @@ h4 {
 
 .badge--live {
   color: var(--ok);
-  border-color: rgba(111, 207, 151, 0.35);
+  border-color: rgba(143, 209, 158, 0.35);
 }
 
 .grid {
