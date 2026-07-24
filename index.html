@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="no-js">
+<html lang="en" class="no-js" data-theme="dark">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -11,7 +11,16 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://utpaldas6.github.io/" />
 <meta property="og:image" content="/icons/desc.png" />
-<meta name="theme-color" content="#1a1b26" />
+<meta name="theme-color" content="#0B0D12" />
+<script>
+(function () {
+  try {
+    var saved = localStorage.getItem("theme");
+    var theme = saved || "dark";
+    document.documentElement.setAttribute("data-theme", theme);
+  } catch (e) {}
+})();
+</script>
 <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
 <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
@@ -20,291 +29,503 @@
 </head>
 <body>
 
-<header class="titlebar">
-  <div class="titlebar__inner">
-    <div class="titlebar__dots" aria-hidden="true"><span></span><span></span><span></span></div>
-    <div class="titlebar__path">utpal<span class="dim">@</span>portfolio<span class="dim">:~$</span></div>
-    <nav class="titlebar__nav" aria-label="Primary">
-      <a href="#experience">experience</a>
-      <a href="#projects">projects</a>
-      <a href="#skills">skills</a>
-      <a href="#contact">contact</a>
-      <a class="titlebar__resume" href="/assets/Utpal_Das_Resume.pdf" download>résumé ↓</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="icon-house" viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></symbol>
+    <symbol id="icon-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></symbol>
+    <symbol id="icon-briefcase" viewBox="0 0 24 24"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" /><rect width="20" height="14" x="2" y="6" rx="2" /></symbol>
+    <symbol id="icon-terminal" viewBox="0 0 24 24"><path d="M12 19h8" /><path d="m4 17 6-6-6-6" /></symbol>
+    <symbol id="icon-folder-git-2" viewBox="0 0 24 24"><path d="M18 19a5 5 0 0 1-5-5v8" /><path d="M9 20H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H20a2 2 0 0 1 2 2v5" /><circle cx="13" cy="12" r="2" /><circle cx="20" cy="19" r="2" /></symbol>
+    <symbol id="icon-bot" viewBox="0 0 24 24"><path d="M12 8V4H8" /><rect width="16" height="12" x="4" y="8" rx="2" /><path d="M2 14h2" /><path d="M20 14h2" /><path d="M15 13v2" /><path d="M9 13v2" /></symbol>
+    <symbol id="icon-book-open" viewBox="0 0 24 24"><path d="M12 5v16" /><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></symbol>
+    <symbol id="icon-mail" viewBox="0 0 24 24"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" /><rect x="2" y="4" width="20" height="16" rx="2" /></symbol>
+    <symbol id="icon-download" viewBox="0 0 24 24"><path d="M12 15V3" /><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><path d="m7 10 5 5 5-5" /></symbol>
+    <symbol id="icon-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" /></symbol>
+    <symbol id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></symbol>
+    <symbol id="icon-command" viewBox="0 0 24 24"><path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" /></symbol>
+    <symbol id="icon-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></symbol>
+    <symbol id="icon-chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" /></symbol>
+    <symbol id="icon-external-link" viewBox="0 0 24 24"><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></symbol>
+    <symbol id="icon-arrow-up-right" viewBox="0 0 24 24"><path d="M7 7h10v10" /><path d="M7 17 17 7" /></symbol>
+    <symbol id="icon-menu" viewBox="0 0 24 24"><path d="M4 5h16" /><path d="M4 12h16" /><path d="M4 19h16" /></symbol>
+    <symbol id="icon-x" viewBox="0 0 24 24"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></symbol>
+    <symbol id="icon-circle-check-big" viewBox="0 0 24 24"><path d="M21.801 10A10 10 0 1 1 17 3.335" /><path d="m9 11 3 3L22 4" /></symbol>
+    <symbol id="icon-git-commit-vertical" viewBox="0 0 24 24"><path d="M12 3v6" /><circle cx="12" cy="12" r="3" /><path d="M12 15v6" /></symbol>
+    <symbol id="icon-layout-grid" viewBox="0 0 24 24"><rect width="7" height="7" x="3" y="3" rx="1" /><rect width="7" height="7" x="14" y="3" rx="1" /><rect width="7" height="7" x="14" y="14" rx="1" /><rect width="7" height="7" x="3" y="14" rx="1" /></symbol>
+  </defs>
+</svg>
+
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar__brand">
+      <span class="sidebar__dot" aria-hidden="true"></span>
+      <div>
+        <p class="sidebar__name">Utpal Das</p>
+        <p class="sidebar__role">GenAI Engineering Manager</p>
+      </div>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Primary">
+      <a href="#hero" class="sidebar__link" data-nav="hero"><svg class="icon" aria-hidden="true"><use href="#icon-house"></use></svg>Home</a>
+      <a href="#about" class="sidebar__link" data-nav="about"><svg class="icon" aria-hidden="true"><use href="#icon-user"></use></svg>About</a>
+      <a href="#experience" class="sidebar__link" data-nav="experience"><svg class="icon" aria-hidden="true"><use href="#icon-briefcase"></use></svg>Experience</a>
+      <a href="#skills" class="sidebar__link" data-nav="skills"><svg class="icon" aria-hidden="true"><use href="#icon-terminal"></use></svg>Skills</a>
+      <a href="#projects" class="sidebar__link" data-nav="projects"><svg class="icon" aria-hidden="true"><use href="#icon-folder-git-2"></use></svg>Projects</a>
+      <a href="#ai-workspace" class="sidebar__link" data-nav="ai-workspace"><svg class="icon" aria-hidden="true"><use href="#icon-bot"></use></svg>AI Workspace</a>
+      <a href="#blogs" class="sidebar__link" data-nav="blogs"><svg class="icon" aria-hidden="true"><use href="#icon-book-open"></use></svg>Blogs</a>
+      <a href="#contact" class="sidebar__link" data-nav="contact"><svg class="icon" aria-hidden="true"><use href="#icon-mail"></use></svg>Contact</a>
     </nav>
-    <button class="titlebar__menu-btn" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
+
+    <div class="sidebar__socials">
+      <a href="https://github.com/UtpalDas6" target="_blank" rel="noopener">GitHub<svg class="icon icon--sm" aria-hidden="true"><use href="#icon-external-link"></use></svg></a>
+      <a href="https://www.linkedin.com/in/utpal-das-b63671126/" target="_blank" rel="noopener">LinkedIn<svg class="icon icon--sm" aria-hidden="true"><use href="#icon-external-link"></use></svg></a>
+      <a href="https://twitter.com/Utpal20386592" target="_blank" rel="noopener">Twitter / X<svg class="icon icon--sm" aria-hidden="true"><use href="#icon-external-link"></use></svg></a>
+      <a href="https://www.youtube.com/channel/UC1tb2a-2j_BoWt7tAMlE1iw/featured" target="_blank" rel="noopener">YouTube<svg class="icon icon--sm" aria-hidden="true"><use href="#icon-external-link"></use></svg></a>
+    </div>
+
+    <div class="sidebar__actions">
+      <a class="btn btn--primary btn--block" href="/assets/Utpal_Das_Resume.pdf" download>
+        <svg class="icon" aria-hidden="true"><use href="#icon-download"></use></svg>Résumé
+      </a>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle color theme">
+        <svg class="icon icon--sun" aria-hidden="true"><use href="#icon-sun"></use></svg>
+        <svg class="icon icon--moon" aria-hidden="true"><use href="#icon-moon"></use></svg>
+      </button>
+    </div>
+
+    <button class="sidebar__cmdk-hint" id="cmdk-trigger" type="button">
+      <svg class="icon icon--sm" aria-hidden="true"><use href="#icon-search"></use></svg>
+      Search
+      <kbd><svg class="icon icon--xs" aria-hidden="true"><use href="#icon-command"></use></svg>K</kbd>
     </button>
+  </aside>
+
+  <!-- MOBILE TOP BAR -->
+  <header class="topbar">
+    <button class="topbar__menu" id="topbar-menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar">
+      <svg class="icon" aria-hidden="true"><use href="#icon-menu"></use></svg>
+    </button>
+    <span class="topbar__brand">utpal<span class="dim">@</span>portfolio</span>
+    <button class="topbar__cmdk" id="topbar-cmdk" type="button" aria-label="Open command palette">
+      <svg class="icon" aria-hidden="true"><use href="#icon-search"></use></svg>
+    </button>
+  </header>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="workspace">
+
+    <!-- HERO -->
+    <section class="ws-section hero" id="hero">
+      <div class="hero__glow" aria-hidden="true"></div>
+      <div class="term">
+        <p class="term__row"><span class="term__prompt">&gt;</span> whoami<span class="cursor" data-cursor-1>▌</span></p>
+        <div class="term__block reveal-in">
+          <p class="term__name">Utpal Das</p>
+          <p class="term__role">GenAI Engineering Manager</p>
+          <p class="term__role">RAG &amp; Knowledge Graph Architect</p>
+          <p class="term__role">Multi-Agent Systems Engineer</p>
+          <p class="term__role">10+ Year Python Developer</p>
+        </div>
+
+        <p class="term__row term__row--gap"><span class="term__prompt">&gt;</span> tech<span class="cursor" data-cursor-2>▌</span></p>
+        <div class="term__chips reveal-in">
+          <span class="chip">Python</span>
+          <span class="chip">FastAPI</span>
+          <span class="chip">Databricks</span>
+          <span class="chip">LangChain</span>
+          <span class="chip">LangGraph</span>
+          <span class="chip">Neo4j</span>
+          <span class="chip">Docker</span>
+        </div>
+
+        <div class="hero__actions reveal-in">
+          <a class="btn btn--primary" href="#projects">View Projects</a>
+          <a class="btn btn--outline" href="/assets/Utpal_Das_Resume.pdf" download>Download Résumé</a>
+          <a class="btn btn--outline" href="#contact">Contact</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="ws-section" id="about">
+      <p class="ws-path">~/about.md</p>
+      <h2 class="ws-title">About</h2>
+      <div class="card reveal">
+        <p>10+ years driving complex, cross-functional technical programs from ambiguous scope to production launch. Led delivery of four GenAI platforms for Fortune 500 clients (Pfizer, Allianz), coordinating engineering and client stakeholders across ingestion, retrieval, evaluation, and deployment.</p>
+        <p>Comfortable going deep on architecture — RAG, knowledge graphs, multi-agent orchestration — while owning program risk and launch readiness. Still writes code every night; the projects below are the proof.</p>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section class="ws-section" id="experience">
+      <p class="ws-path">~/experience.log</p>
+      <h2 class="ws-title">Experience</h2>
+
+      <ol class="gitlog">
+        <li class="gitlog__item reveal">
+          <span class="gitlog__dot" aria-hidden="true"><svg class="icon icon--sm" aria-hidden="true"><use href="#icon-git-commit-vertical"></use></svg></span>
+          <details class="gitlog__details" open>
+            <summary>
+              <span class="gitlog__date">Mar 2026 — Present</span>
+              <span class="gitlog__msg">Deloitte India · Engineering Manager, Technical Program &amp; Architecture Lead</span>
+              <span class="gitlog__client">Client: Allianz</span>
+            </summary>
+            <div class="gitlog__body">
+              <p class="gitlog__project">Agentic Data Migration Platform</p>
+              <ul>
+                <li>Architected and led delivery of a 6-agent Claude Code system — clone, repo analysis, dataset lookup, code rewrite, output verification, feature-branch push — automating Foundry-to-Databricks migration end to end.</li>
+                <li>Cut delivery time up to 90% and migration cost up to 95% versus manual migration, while raising output per engineer.</li>
+                <li>Reduced per-run token cost with a terse-prompting ("Caveman") strategy and shipped an end-of-run report tracking assets migrated and tokens spent.</li>
+                <li>Integrated the pipeline across five external systems via MCP: Foundry, Databricks, Atlassian, GitMCP, Synapse.</li>
+              </ul>
+            </div>
+          </details>
+        </li>
+
+        <li class="gitlog__item reveal">
+          <span class="gitlog__dot" aria-hidden="true"><svg class="icon icon--sm" aria-hidden="true"><use href="#icon-git-commit-vertical"></use></svg></span>
+          <details class="gitlog__details">
+            <summary>
+              <span class="gitlog__date">Jul 2021 — Mar 2026</span>
+              <span class="gitlog__msg">Deloitte India · Engineering Manager, GenAI Platform Lead</span>
+              <span class="gitlog__client">Client: Pfizer</span>
+            </summary>
+            <div class="gitlog__body">
+              <p class="gitlog__project">Oncoscout · Mapii · Constellation</p>
+              <ul>
+                <li><strong>Oncoscout</strong> — knowledge-graph chat over Neo4j/Cypher with single- and multi-hop retrieval, synonym lookup, and multi-modal SharePoint ingestion. Owned engineering execution and resolved a Cypher performance / hybrid-RAG stability issue that protected the launch timeline.</li>
+                <li><strong>Mapii</strong> — shipped configurable chat and temperature settings for Pfizer Oncology, then led cross-team evaluation of clusterRAG/graphRAG as the next retrieval architecture.</li>
+                <li><strong>Constellation</strong> — an enterprise RAG platform for Q&amp;A, search, and summarization. A RAGAs-based evaluation gate cut hallucination-flagged responses by an estimated 30%. Negotiated production scope (SSO, audit logging) directly with client stakeholders. Ran on AWS EC2/Docker at an estimated 99.5%+ uptime, ~2,000+ queries/day.</li>
+              </ul>
+            </div>
+          </details>
+        </li>
+
+        <li class="gitlog__item reveal">
+          <span class="gitlog__dot" aria-hidden="true"><svg class="icon icon--sm" aria-hidden="true"><use href="#icon-git-commit-vertical"></use></svg></span>
+          <details class="gitlog__details">
+            <summary>
+              <span class="gitlog__date">Jun 2019 — Jun 2021</span>
+              <span class="gitlog__msg">Mindfire Solutions · Senior Python Developer</span>
+              <span class="gitlog__client">Client: BrightEdge</span>
+            </summary>
+            <div class="gitlog__body">
+              <p class="gitlog__project">Spark (SEO platform)</p>
+              <ul>
+                <li>Built crawler/parser infrastructure processing an estimated millions of pages a month across 50+ client domains to feed SEO ranking recommendations.</li>
+                <li>Shipped "Save for Later" bookmarking, adopted by an estimated 10,000+ users.</li>
+                <li>Architected a Google Maps → Leaflet.js migration saving an estimated $50K+ a year.</li>
+              </ul>
+            </div>
+          </details>
+        </li>
+
+        <li class="gitlog__item reveal">
+          <span class="gitlog__dot" aria-hidden="true"><svg class="icon icon--sm" aria-hidden="true"><use href="#icon-git-commit-vertical"></use></svg></span>
+          <details class="gitlog__details">
+            <summary>
+              <span class="gitlog__date">Jul 2018 — May 2019</span>
+              <span class="gitlog__msg">Cognizant · Python Developer</span>
+              <span class="gitlog__client">Client: Walmart</span>
+            </summary>
+            <div class="gitlog__body">
+              <p class="gitlog__project">Partnerbot</p>
+              <ul>
+                <li>Built an NLP/NLU seller-support bot (RASA) and a Flask template-generation service that standardized onboarding data (XML/Excel/JSON) for Walmart Marketplace sellers.</li>
+              </ul>
+            </div>
+          </details>
+        </li>
+
+        <li class="gitlog__item reveal">
+          <span class="gitlog__dot" aria-hidden="true"><svg class="icon icon--sm" aria-hidden="true"><use href="#icon-git-commit-vertical"></use></svg></span>
+          <details class="gitlog__details">
+            <summary>
+              <span class="gitlog__date">Oct 2015 — May 2018</span>
+              <span class="gitlog__msg">Infosys · Systems Engineer</span>
+              <span class="gitlog__client">Client: Aetna</span>
+            </summary>
+            <div class="gitlog__body">
+              <p class="gitlog__project">PAR UI</p>
+              <ul>
+                <li>Designed a MERN-stack policy/agent lookup application and the regression test framework that became the team's automated QA baseline.</li>
+              </ul>
+            </div>
+          </details>
+        </li>
+      </ol>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="ws-section" id="skills">
+      <p class="ws-path">~/skills.json</p>
+      <h2 class="ws-title">Skills</h2>
+
+      <div class="skill-group reveal">
+        <h3 class="skill-group__label">ai_llm</h3>
+        <div class="chip-row">
+          <span class="chip">RAG</span><span class="chip">GraphRAG</span><span class="chip">Hybrid RAG</span>
+          <span class="chip">Knowledge Graphs</span><span class="chip">Neo4j</span><span class="chip">Cypher</span>
+          <span class="chip">LangChain</span><span class="chip">LangGraph</span><span class="chip">Multi-Agent Orchestration</span>
+          <span class="chip">Claude Code</span><span class="chip">MCP</span><span class="chip">LLM Evaluation (RAGAs)</span>
+        </div>
+      </div>
+
+      <div class="skill-group reveal">
+        <h3 class="skill-group__label">platform</h3>
+        <div class="chip-row">
+          <span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">React</span>
+          <span class="chip">TypeScript</span><span class="chip">AWS</span><span class="chip">Databricks</span>
+          <span class="chip">Postgres</span><span class="chip">Docker</span>
+        </div>
+      </div>
+
+      <div class="skill-group reveal">
+        <h3 class="skill-group__label">leadership</h3>
+        <div class="chip-row">
+          <span class="chip">Technical Program Management</span><span class="chip">Solution Architecture</span>
+          <span class="chip">Cross-Functional Delivery</span><span class="chip">Stakeholder Negotiation</span>
+          <span class="chip">Risk &amp; Launch Readiness</span>
+        </div>
+      </div>
+
+      <div class="credentials reveal">
+        <div>
+          <h3 class="skill-group__label">certifications</h3>
+          <ul class="plain-list">
+            <li>Google Certified GenAI Developer</li>
+            <li>Neo4j Certified Graph Data Science Developer</li>
+            <li>HackerRank Certified Python, Java, SQL Developer</li>
+            <li>Deloitte Certified Project Manager</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="skill-group__label">education</h3>
+          <ul class="plain-list">
+            <li>B.Tech, Electrical &amp; Electronics Engineering<br /><span class="dim">Siksha 'O' Anusandhan University · 2011 – 2015</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="ws-section" id="projects">
+      <p class="ws-path">~/projects/</p>
+      <h2 class="ws-title">Projects</h2>
+
+      <h3 class="ws-subtitle">enterprise <span class="badge badge--muted">client work · code under NDA</span></h3>
+      <div class="repo-grid">
+        <article class="repo-card reveal">
+          <div class="repo-card__head">
+            <svg class="icon" aria-hidden="true"><use href="#icon-folder-git-2"></use></svg>
+            <h4>agentic-data-migration</h4>
+            <span class="badge badge--nda">NDA</span>
+          </div>
+          <p class="repo-card__client">Allianz</p>
+          <p class="repo-card__desc">Six orchestrated Claude Code sub-agents automate a full Foundry-to-Databricks migration.</p>
+          <div class="chip-row chip-row--sm">
+            <span class="chip chip--sm">Claude Code</span><span class="chip chip--sm">MCP</span><span class="chip chip--sm">Databricks</span><span class="chip chip--sm">Foundry</span>
+          </div>
+          <details class="repo-card__details">
+            <summary>Details</summary>
+            <p>Up to 90% faster, up to 95% cheaper than doing it by hand — with a terse-prompting ("Caveman") strategy to keep per-run token cost down.</p>
+          </details>
+        </article>
+
+        <article class="repo-card reveal">
+          <div class="repo-card__head">
+            <svg class="icon" aria-hidden="true"><use href="#icon-folder-git-2"></use></svg>
+            <h4>oncoscout</h4>
+            <span class="badge badge--nda">NDA</span>
+          </div>
+          <p class="repo-card__client">Pfizer Oncology</p>
+          <p class="repo-card__desc">Knowledge-graph chat with single- and multi-hop retrieval, synonym lookup, and multi-modal document ingestion.</p>
+          <div class="chip-row chip-row--sm">
+            <span class="chip chip--sm">Neo4j</span><span class="chip chip--sm">Cypher</span><span class="chip chip--sm">Hybrid RAG</span>
+          </div>
+          <details class="repo-card__details">
+            <summary>Details</summary>
+            <p>Owned engineering execution and resolved a Cypher performance / hybrid-RAG stability issue that protected the launch timeline.</p>
+          </details>
+        </article>
+
+        <article class="repo-card reveal">
+          <div class="repo-card__head">
+            <svg class="icon" aria-hidden="true"><use href="#icon-folder-git-2"></use></svg>
+            <h4>constellation</h4>
+            <span class="badge badge--nda">NDA</span>
+          </div>
+          <p class="repo-card__client">Pfizer</p>
+          <p class="repo-card__desc">Enterprise RAG platform for Q&amp;A, search, and summarization.</p>
+          <div class="chip-row chip-row--sm">
+            <span class="chip chip--sm">FastAPI</span><span class="chip chip--sm">LangChain</span><span class="chip chip--sm">AWS</span><span class="chip chip--sm">Docker</span>
+          </div>
+          <details class="repo-card__details">
+            <summary>Details</summary>
+            <p>RAGAs eval gate cut hallucination-flagged responses ~30%. ~2,000+ queries/day at ~99.5%+ uptime on AWS EC2/Docker.</p>
+          </details>
+        </article>
+
+        <article class="repo-card reveal">
+          <div class="repo-card__head">
+            <svg class="icon" aria-hidden="true"><use href="#icon-folder-git-2"></use></svg>
+            <h4>mapii</h4>
+            <span class="badge badge--nda">NDA</span>
+          </div>
+          <p class="repo-card__client">Pfizer Oncology</p>
+          <p class="repo-card__desc">Configurable chat and temperature controls for Pfizer Oncology.</p>
+          <div class="chip-row chip-row--sm">
+            <span class="chip chip--sm">LangChain</span><span class="chip chip--sm">GraphRAG</span><span class="chip chip--sm">ClusterRAG</span>
+          </div>
+          <details class="repo-card__details">
+            <summary>Details</summary>
+            <p>Led the cross-team evaluation that got clusterRAG/graphRAG adopted as the program's next retrieval architecture.</p>
+          </details>
+        </article>
+      </div>
+
+      <h3 class="ws-subtitle">personal <span class="badge badge--live">nights &amp; weekends · code is public</span></h3>
+      <div class="repo-grid">
+        <article class="repo-card reveal">
+          <div class="repo-card__head">
+            <svg class="icon" aria-hidden="true"><use href="#icon-folder-git-2"></use></svg>
+            <h4>agent-ops</h4>
+            <span class="badge badge--live">Live</span>
+          </div>
+          <p class="repo-card__desc">Jira for AI agent fleets: natural-language briefs become tasks, a routing matrix assigns the model by criticality × size.</p>
+          <div class="chip-row chip-row--sm">
+            <span class="chip chip--sm">Node.js</span><span class="chip chip--sm">Claude Code</span><span class="chip chip--sm">LLM routing</span>
+          </div>
+          <div class="repo-card__links">
+            <a href="https://claude.ai/code/artifact/b32dd824-44b9-49b3-a307-0f0d9c864d22" target="_blank" rel="noopener">Live Demo<svg class="icon icon--sm" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg></a>
+            <a href="https://github.com/UtpalDas6/agent-ops" target="_blank" rel="noopener">GitHub<svg class="icon icon--sm" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg></a>
+          </div>
+        </article>
+
+        <article class="repo-card reveal">
+          <div class="repo-card__head">
+            <svg class="icon" aria-hidden="true"><use href="#icon-folder-git-2"></use></svg>
+            <h4>rock-paper-scissor</h4>
+            <span class="badge badge--live">Live</span>
+          </div>
+          <p class="repo-card__desc">Real-time 3D multiplayer, built on Three.js with zero build step. Procedural geometry, synced countdown.</p>
+          <div class="chip-row chip-row--sm">
+            <span class="chip chip--sm">Three.js</span><span class="chip chip--sm">WebSockets</span><span class="chip chip--sm">Web Audio</span>
+          </div>
+          <div class="repo-card__links">
+            <a href="https://utpaldas6.github.io/Rock-Paper-Scissor/" target="_blank" rel="noopener">Live Demo<svg class="icon icon--sm" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg></a>
+            <a href="https://github.com/UtpalDas6/Rock-Paper-Scissor" target="_blank" rel="noopener">GitHub<svg class="icon icon--sm" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg></a>
+          </div>
+        </article>
+
+        <article class="repo-card reveal">
+          <div class="repo-card__head">
+            <svg class="icon" aria-hidden="true"><use href="#icon-folder-git-2"></use></svg>
+            <h4>ascii_image</h4>
+            <span class="badge badge--live">Live</span>
+          </div>
+          <p class="repo-card__desc">Drop an image in, get ASCII art out — entirely in the browser, no server round-trip.</p>
+          <div class="chip-row chip-row--sm">
+            <span class="chip chip--sm">JavaScript</span><span class="chip chip--sm">Image processing</span>
+          </div>
+          <div class="repo-card__links">
+            <a href="https://utpaldas6.github.io/ascii_image/" target="_blank" rel="noopener">Live Demo<svg class="icon icon--sm" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg></a>
+            <a href="https://github.com/UtpalDas6/ascii_image" target="_blank" rel="noopener">GitHub<svg class="icon icon--sm" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg></a>
+          </div>
+        </article>
+
+        <article class="repo-card reveal">
+          <div class="repo-card__head">
+            <svg class="icon" aria-hidden="true"><use href="#icon-folder-git-2"></use></svg>
+            <h4>pyStocks+</h4>
+            <span class="badge badge--muted">Public</span>
+          </div>
+          <p class="repo-card__desc">A BUY/SELL/HOLD signal derived from live NSE promoter-shareholding trends.</p>
+          <div class="chip-row chip-row--sm">
+            <span class="chip chip--sm">Python</span><span class="chip chip--sm">Flask</span><span class="chip chip--sm">NSE data</span>
+          </div>
+          <div class="repo-card__links">
+            <a href="https://github.com/UtpalDas6/pyStocks" target="_blank" rel="noopener">GitHub<svg class="icon icon--sm" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg></a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- AI WORKSPACE -->
+    <section class="ws-section" id="ai-workspace">
+      <p class="ws-path">~/ai-workspace/</p>
+      <h2 class="ws-title">AI Workspace</h2>
+      <p class="ws-lede">Current focus — what's actually in production or in daily use, not a buzzword list.</p>
+
+      <div class="status-grid reveal">
+        <div class="status-item"><span class="status-dot" aria-hidden="true"></span>RAG Systems</div>
+        <div class="status-item"><span class="status-dot" aria-hidden="true"></span>Multi-Agent Orchestration</div>
+        <div class="status-item"><span class="status-dot" aria-hidden="true"></span>MCP (Model Context Protocol)</div>
+        <div class="status-item"><span class="status-dot" aria-hidden="true"></span>Claude Code</div>
+        <div class="status-item"><span class="status-dot" aria-hidden="true"></span>Knowledge Graphs (Neo4j)</div>
+        <div class="status-item"><span class="status-dot" aria-hidden="true"></span>LangGraph</div>
+        <div class="status-item"><span class="status-dot" aria-hidden="true"></span>Vector Retrieval (FAISS)</div>
+      </div>
+    </section>
+
+    <!-- BLOGS -->
+    <section class="ws-section" id="blogs">
+      <p class="ws-path">~/blogs/</p>
+      <h2 class="ws-title">Blogs</h2>
+      <div class="card card--empty reveal">
+        <svg class="icon icon--lg" aria-hidden="true"><use href="#icon-book-open"></use></svg>
+        <p>Nothing published yet — check back soon.</p>
+        <p class="dim">In the meantime, <a href="https://www.youtube.com/channel/UC1tb2a-2j_BoWt7tAMlE1iw/featured" target="_blank" rel="noopener">here's my YouTube channel</a>.</p>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="ws-section" id="contact">
+      <p class="ws-path">~/contact.sh</p>
+      <h2 class="ws-title">Contact</h2>
+      <div class="term term--contact reveal">
+        <p class="term__row"><span class="term__prompt">$</span> contact</p>
+        <p class="term__kv"><span class="dim">Email:</span> <a href="mailto:utpaldas.6osm@gmail.com">utpaldas.6osm@gmail.com</a></p>
+        <p class="term__kv"><span class="dim">LinkedIn:</span> <a href="https://www.linkedin.com/in/utpal-das-b63671126/" target="_blank" rel="noopener">linkedin.com/in/utpal-das</a></p>
+        <p class="term__kv"><span class="dim">GitHub:</span> <a href="https://github.com/UtpalDas6" target="_blank" rel="noopener">github.com/UtpalDas6</a></p>
+        <p class="term__row term__row--gap"><a class="btn btn--primary" href="mailto:utpaldas.6osm@gmail.com?subject=Hello%20Utpal">&gt; Send Message</a></p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>© <span data-year></span> Utpal Das. Built with Claude Code — no framework, no build step, just HTML, CSS, and a little JS. <a href="https://github.com/UtpalDas6/UtpalDas6.github.io" target="_blank" rel="noopener">view source ↗</a></p>
+    </footer>
+  </main>
+</div>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="bottom-nav" aria-label="Primary mobile">
+  <a href="#hero" data-nav="hero"><svg class="icon" aria-hidden="true"><use href="#icon-house"></use></svg><span>Home</span></a>
+  <a href="#projects" data-nav="projects"><svg class="icon" aria-hidden="true"><use href="#icon-folder-git-2"></use></svg><span>Projects</span></a>
+  <a href="#skills" data-nav="skills"><svg class="icon" aria-hidden="true"><use href="#icon-terminal"></use></svg><span>Skills</span></a>
+  <a href="#contact" data-nav="contact"><svg class="icon" aria-hidden="true"><use href="#icon-mail"></use></svg><span>Contact</span></a>
+  <button type="button" id="bottom-nav-more" aria-label="More"><svg class="icon" aria-hidden="true"><use href="#icon-menu"></use></svg><span>More</span></button>
+</nav>
+
+<div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+<!-- COMMAND PALETTE -->
+<div class="cmdk" id="cmdk" hidden>
+  <div class="cmdk__backdrop" data-cmdk-close></div>
+  <div class="cmdk__panel" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="cmdk__input-row">
+      <svg class="icon" aria-hidden="true"><use href="#icon-search"></use></svg>
+      <input class="cmdk__input" id="cmdk-input" type="text" placeholder="Type a command or search…" autocomplete="off" aria-label="Command palette input" />
+      <kbd>esc</kbd>
+    </div>
+    <ul class="cmdk__list" id="cmdk-list"></ul>
   </div>
-  <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile">
-    <a href="#experience">experience</a>
-    <a href="#projects">projects</a>
-    <a href="#skills">skills</a>
-    <a href="#contact">contact</a>
-    <a href="/assets/Utpal_Das_Resume.pdf" download>résumé ↓</a>
-  </nav>
-</header>
-
-<main>
-
-  <!-- HERO -->
-  <section class="hero" id="whoami">
-    <canvas class="hero__graph" id="graph-canvas" aria-hidden="true"></canvas>
-    <div class="hero__inner">
-    <div class="term">
-      <p class="term__prompt-line"><span class="chevron">&gt;</span><span data-typed-prompt>tell me about Utpal Das</span><span class="cursor" data-prompt-cursor aria-hidden="true">▌</span></p>
-
-      <div class="thinking" id="thinking" aria-live="polite">
-        <span class="thinking__spinner" data-spinner aria-hidden="true">✻</span>
-        <span data-thinking-verb>Noodling…</span>
-        <span class="dim">(<span data-elapsed>0</span>s · esc to skip)</span>
-      </div>
-
-      <div class="response" id="hero-response">
-        <p class="tool-call"><span class="bullet">⏺</span><span class="tool-name">Read</span>(whoami)</p>
-        <h1 class="term__name">Utpal Das</h1>
-
-        <p class="tool-call term__line--gap"><span class="bullet">⏺</span><span class="tool-name">Bash</span>(role --current)</p>
-        <p class="term__out">GenAI Engineering Manager, Deloitte India</p>
-        <p class="term__out term__out--dim">Architecting RAG, knowledge-graph, and multi-agent systems that go to production at Fortune 500 scale.</p>
-
-        <p class="tool-call term__line--gap"><span class="bullet">⏺</span><span class="tool-name">Bash</span>(facts --headline)</p>
-        <div class="todo-list">
-          <p class="todo-item"><span class="todo-check">☒</span>10+ years shipping software, from Aetna's policy UI to Allianz's agent fleets</p>
-          <p class="todo-item"><span class="todo-check">☒</span>4 GenAI platforms in production at Pfizer &amp; Allianz</p>
-          <p class="todo-item"><span class="todo-check">☒</span>Still writes code every night — the projects below are the proof</p>
-        </div>
-
-        <div class="term__actions">
-          <a class="btn btn--primary" href="#projects">View the work →</a>
-          <a class="btn" href="/assets/Utpal_Das_Resume.pdf" download>Download résumé</a>
-          <a class="btn" href="#contact">Say hello</a>
-        </div>
-      </div>
-    </div>
-    </div>
-  </section>
-
-  <!-- EXPERIENCE -->
-  <section class="section" id="experience">
-    <div class="cmd-block reveal">
-      <h2 class="cmd"><span class="bullet">⏺</span><span class="tool-name">Bash</span>(experience --timeline --reverse-chronological)</h2>
-      <p class="tool-result">⎿  5 roles · 10+ years · reverse chronological</p>
-    </div>
-
-    <ol class="timeline">
-      <li class="timeline__item reveal">
-        <div class="timeline__meta">
-          <span class="timeline__dates">Mar 2026 — Present</span>
-          <span class="timeline__client">Client: Allianz</span>
-        </div>
-        <h3>Deloitte India · Engineering Manager, Technical Program &amp; Architecture Lead</h3>
-        <p class="timeline__project">Agentic Data Migration Platform</p>
-        <ul>
-          <li>Architected and led delivery of a 6-agent Claude Code system — clone, repo analysis, dataset lookup, code rewrite, output verification, feature-branch push — automating Foundry-to-Databricks migration end to end.</li>
-          <li>Cut delivery time up to 90% and migration cost up to 95% versus manual migration, while raising output per engineer.</li>
-          <li>Reduced per-run token cost with a terse-prompting ("Caveman") strategy and shipped an end-of-run report tracking assets migrated and tokens spent.</li>
-          <li>Integrated the pipeline across five external systems via MCP: Foundry, Databricks, Atlassian, GitMCP, Synapse.</li>
-        </ul>
-      </li>
-
-      <li class="timeline__item reveal">
-        <div class="timeline__meta">
-          <span class="timeline__dates">Jul 2021 — Mar 2026</span>
-          <span class="timeline__client">Client: Pfizer</span>
-        </div>
-        <h3>Deloitte India · Engineering Manager, GenAI Platform Lead</h3>
-        <p class="timeline__project">Oncoscout · Mapii · Constellation</p>
-        <ul>
-          <li><strong>Oncoscout</strong> — knowledge-graph chat over Neo4j/Cypher with single- and multi-hop retrieval, synonym lookup, and multi-modal SharePoint ingestion. Owned engineering execution and resolved a Cypher performance / hybrid-RAG stability issue that protected the launch timeline.</li>
-          <li><strong>Mapii</strong> — shipped configurable chat and temperature settings for Pfizer Oncology, then led cross-team evaluation of clusterRAG/graphRAG as the next retrieval architecture.</li>
-          <li><strong>Constellation</strong> — an enterprise RAG platform for Q&amp;A, search, and summarization. A RAGAs-based evaluation gate cut hallucination-flagged responses by an estimated 30%. Negotiated production scope (SSO, audit logging) directly with client stakeholders. Ran on AWS EC2/Docker at an estimated 99.5%+ uptime, ~2,000+ queries/day.</li>
-        </ul>
-      </li>
-
-      <li class="timeline__item reveal">
-        <div class="timeline__meta">
-          <span class="timeline__dates">Jun 2019 — Jun 2021</span>
-          <span class="timeline__client">Client: BrightEdge</span>
-        </div>
-        <h3>Mindfire Solutions · Senior Python Developer</h3>
-        <p class="timeline__project">Spark (SEO platform)</p>
-        <ul>
-          <li>Built crawler/parser infrastructure processing an estimated millions of pages a month across 50+ client domains to feed SEO ranking recommendations.</li>
-          <li>Shipped "Save for Later" bookmarking, adopted by an estimated 10,000+ users.</li>
-          <li>Architected a Google Maps → Leaflet.js migration saving an estimated $50K+ a year.</li>
-        </ul>
-      </li>
-
-      <li class="timeline__item reveal">
-        <div class="timeline__meta">
-          <span class="timeline__dates">Jul 2018 — May 2019</span>
-          <span class="timeline__client">Client: Walmart</span>
-        </div>
-        <h3>Cognizant · Python Developer</h3>
-        <p class="timeline__project">Partnerbot</p>
-        <ul>
-          <li>Built an NLP/NLU seller-support bot (RASA) and a Flask template-generation service that standardized onboarding data (XML/Excel/JSON) for Walmart Marketplace sellers.</li>
-        </ul>
-      </li>
-
-      <li class="timeline__item reveal">
-        <div class="timeline__meta">
-          <span class="timeline__dates">Oct 2015 — May 2018</span>
-          <span class="timeline__client">Client: Aetna</span>
-        </div>
-        <h3>Infosys · Systems Engineer</h3>
-        <p class="timeline__project">PAR UI</p>
-        <ul>
-          <li>Designed a MERN-stack policy/agent lookup application and the regression test framework that became the team's automated QA baseline.</li>
-        </ul>
-      </li>
-    </ol>
-  </section>
-
-  <!-- PROJECTS -->
-  <section class="section" id="projects">
-    <div class="cmd-block reveal">
-      <h2 class="cmd"><span class="bullet">⏺</span><span class="tool-name">Bash</span>(ls ./projects)</h2>
-      <p class="tool-result">⎿  8 projects · 4 enterprise, 4 personal</p>
-    </div>
-
-    <div class="subhead reveal">
-      <h3 class="dir">./enterprise <span class="badge">client work — architecture &amp; impact, code under NDA</span></h3>
-    </div>
-    <div class="grid">
-      <article class="card reveal">
-        <h4>Agentic Data Migration Platform</h4>
-        <p class="card__client">Allianz</p>
-        <p>Six orchestrated Claude Code sub-agents automate a full Foundry-to-Databricks migration. Up to 90% faster, up to 95% cheaper than doing it by hand.</p>
-        <p class="card__tags">Claude Code · MCP · Databricks · Foundry</p>
-      </article>
-      <article class="card reveal">
-        <h4>Oncoscout</h4>
-        <p class="card__client">Pfizer Oncology</p>
-        <p>Knowledge-graph chat with single- and multi-hop retrieval, synonym lookup, and multi-modal document ingestion.</p>
-        <p class="card__tags">Neo4j · Cypher · Hybrid RAG</p>
-      </article>
-      <article class="card reveal">
-        <h4>Constellation</h4>
-        <p class="card__client">Pfizer</p>
-        <p>Enterprise RAG platform for Q&amp;A, search, and summarization. RAGAs eval gate, ~2,000+ queries/day at ~99.5%+ uptime.</p>
-        <p class="card__tags">FastAPI · LangChain · AWS · Docker</p>
-      </article>
-      <article class="card reveal">
-        <h4>Mapii</h4>
-        <p class="card__client">Pfizer Oncology</p>
-        <p>Configurable chat and temperature controls, plus the evaluation that got clusterRAG/graphRAG adopted as the next retrieval architecture.</p>
-        <p class="card__tags">LangChain · GraphRAG · ClusterRAG</p>
-      </article>
-    </div>
-
-    <div class="subhead reveal">
-      <h3 class="dir">./personal <span class="badge badge--live">nights &amp; weekends — code is public</span></h3>
-    </div>
-    <div class="grid">
-      <article class="card reveal">
-        <h4>Agent Ops — Mission Control</h4>
-        <p>Jira for AI agent fleets: natural-language briefs become tasks, a routing matrix assigns the model by criticality × size, and a kanban board tracks them live.</p>
-        <p class="card__tags">Node.js · Claude Code · LLM routing</p>
-        <div class="card__links">
-          <a href="https://claude.ai/code/artifact/b32dd824-44b9-49b3-a307-0f0d9c864d22" target="_blank" rel="noopener">Live app ↗</a>
-          <a href="https://github.com/UtpalDas6/agent-ops" target="_blank" rel="noopener">Code ↗</a>
-        </div>
-      </article>
-      <article class="card reveal">
-        <h4>Rock · Paper · Scissors — 3D Multiplayer</h4>
-        <p>Real-time 3D multiplayer, built on Three.js with zero build step. Procedural geometry, synced countdown, a small WebSocket relay for cross-device play.</p>
-        <p class="card__tags">Three.js · WebSockets · Web Audio</p>
-        <div class="card__links">
-          <a href="https://utpaldas6.github.io/Rock-Paper-Scissor/" target="_blank" rel="noopener">Live app ↗</a>
-          <a href="https://github.com/UtpalDas6/Rock-Paper-Scissor" target="_blank" rel="noopener">Code ↗</a>
-        </div>
-      </article>
-      <article class="card reveal">
-        <h4>ascii_image</h4>
-        <p>Drop an image in, get ASCII art out — entirely in the browser, no server round-trip.</p>
-        <p class="card__tags">JavaScript · Image processing</p>
-        <div class="card__links">
-          <a href="https://utpaldas6.github.io/ascii_image/" target="_blank" rel="noopener">Live app ↗</a>
-          <a href="https://github.com/UtpalDas6/ascii_image" target="_blank" rel="noopener">Code ↗</a>
-        </div>
-      </article>
-      <article class="card reveal">
-        <h4>pyStocks+</h4>
-        <p>A BUY/SELL/HOLD signal derived from live NSE promoter-shareholding trends, with manual fallback when NSE rate-limits a lookup.</p>
-        <p class="card__tags">Python · Flask · NSE data</p>
-        <div class="card__links">
-          <a href="https://github.com/UtpalDas6/pyStocks" target="_blank" rel="noopener">Code ↗</a>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <!-- SKILLS -->
-  <section class="section" id="skills">
-    <div class="cmd-block reveal">
-      <h2 class="cmd"><span class="bullet">⏺</span><span class="tool-name">Read</span>(skills.json)</h2>
-      <p class="tool-result">⎿  25 skills across 3 categories</p>
-    </div>
-    <pre class="json-block reveal"><code><span class="punc">{</span>
-  <span class="key">"ai_llm"</span><span class="punc">:</span> <span class="str">["RAG", "GraphRAG", "Hybrid RAG", "Knowledge Graphs", "Neo4j", "Cypher", "LangChain", "LangGraph", "Multi-Agent Orchestration", "Claude Code", "MCP", "LLM Evaluation (RAGAs)"]</span><span class="punc">,</span>
-  <span class="key">"platform"</span><span class="punc">:</span> <span class="str">["Python", "FastAPI", "React", "TypeScript", "AWS", "Databricks", "Postgres", "Docker"]</span><span class="punc">,</span>
-  <span class="key">"leadership"</span><span class="punc">:</span> <span class="str">["Technical Program Management", "Solution Architecture", "Cross-Functional Delivery", "Stakeholder Negotiation", "Risk &amp; Launch Readiness"]</span>
-<span class="punc">}</span></code></pre>
-
-    <div class="cmd-block cmd-block--tight reveal">
-      <h2 class="cmd"><span class="bullet">⏺</span><span class="tool-name">Bash</span>(whoami --credentials)</h2>
-      <p class="tool-result">⎿  4 certifications, 1 degree</p>
-    </div>
-    <div class="credentials reveal">
-      <div>
-        <h3 class="dir">certifications</h3>
-        <ul class="plain-list">
-          <li>Google Certified GenAI Developer</li>
-          <li>Neo4j Certified Graph Data Science Developer</li>
-          <li>HackerRank Certified Python, Java, SQL Developer</li>
-          <li>Deloitte Certified Project Manager</li>
-        </ul>
-      </div>
-      <div>
-        <h3 class="dir">education</h3>
-        <ul class="plain-list">
-          <li>B.Tech, Electrical &amp; Electronics Engineering<br /><span class="dim">Siksha 'O' Anusandhan University · 2011 – 2015</span></li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section class="section section--contact" id="contact">
-    <div class="cmd-block reveal">
-      <h2 class="cmd"><span class="bullet">⏺</span><span class="tool-name">Bash</span>(contact --me)</h2>
-      <p class="tool-result">⎿  6 ways to reach him</p>
-    </div>
-    <p class="contact__lede reveal">Hiring for GenAI, platform, TPM, or architect roles — or just want to talk knowledge graphs and chess? My terminal's always open.</p>
-    <div class="contact__links reveal">
-      <a class="contact__link" href="mailto:utpaldas.6osm@gmail.com">utpaldas.6osm@gmail.com</a>
-      <a class="contact__link" href="https://www.linkedin.com/in/utpal-das-b63671126/" target="_blank" rel="noopener">--linkedin</a>
-      <a class="contact__link" href="https://github.com/UtpalDas6" target="_blank" rel="noopener">--github</a>
-      <a class="contact__link" href="https://twitter.com/Utpal20386592" target="_blank" rel="noopener">--twitter</a>
-      <a class="contact__link" href="https://www.youtube.com/channel/UC1tb2a-2j_BoWt7tAMlE1iw/featured" target="_blank" rel="noopener">--youtube</a>
-      <a class="contact__link" href="/assets/Utpal_Das_Resume.pdf" download>--resume</a>
-    </div>
-  </section>
-
-</main>
-
-<footer class="footer">
-  <p>© <span data-year></span> Utpal Das. Built with Claude Code — no framework, no build step, just HTML, CSS, and a little JS. <a href="https://github.com/UtpalDas6/UtpalDas6.github.io" target="_blank" rel="noopener">view source ↗</a></p>
-</footer>
-
-<div class="cmdbar">
-  <p class="cmdbar__response" id="cmdbar-response"></p>
-  <form class="cmdbar__row" id="cmdbar-form">
-    <span class="cmdbar__prompt">&gt;</span>
-    <input class="cmdbar__input" id="cmdbar-input" type="text" autocomplete="off" placeholder="Ask about his projects, experience, skills, or how to reach him…" aria-label="Ask about this portfolio" />
-    <span class="cmdbar__hint">↵ enter</span>
-  </form>
 </div>
 
 <script src="/vendor/lenis.min.js"></script>

@@ -15,38 +15,100 @@ document.documentElement.classList.remove("no-js");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
   // ---------------------------------------------------------------
-  // mobile nav toggle
+  // theme toggle (persisted, no flash — <head> inline script sets the
+  // initial attribute before paint)
   // ---------------------------------------------------------------
-  var menuBtn = document.querySelector(".titlebar__menu-btn");
-  var mobileNav = document.getElementById("mobile-nav");
-  if (menuBtn && mobileNav) {
-    menuBtn.addEventListener("click", function () {
-      var open = mobileNav.classList.toggle("is-open");
-      menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
-    });
-    mobileNav.querySelectorAll("a").forEach(function (a) {
-      a.addEventListener("click", function () {
-        mobileNav.classList.remove("is-open");
-        menuBtn.setAttribute("aria-expanded", "false");
-      });
+  var themeToggle = document.getElementById("theme-toggle");
+  if (themeToggle) {
+    themeToggle.addEventListener("click", function () {
+      var current = document.documentElement.getAttribute("data-theme") || "dark";
+      var next = current === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      try {
+        localStorage.setItem("theme", next);
+      } catch (e) {}
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute("content", next === "dark" ? "#0B0D12" : "#FAF9F7");
     });
   }
 
   // ---------------------------------------------------------------
-  // smooth scroll (Lenis) — scrolls the real document, so native
-  // scroll events & anime's scroll observer keep working untouched
+  // mobile sidebar drawer
+  // ---------------------------------------------------------------
+  var sidebar = document.getElementById("sidebar");
+  var topbarMenu = document.getElementById("topbar-menu");
+  var bottomNavMore = document.getElementById("bottom-nav-more");
+  var sidebarBackdrop = document.getElementById("sidebar-backdrop");
+
+  function openSidebar() {
+    if (!sidebar) return;
+    sidebar.classList.add("is-open");
+    if (sidebarBackdrop) sidebarBackdrop.classList.add("is-visible");
+    if (topbarMenu) topbarMenu.setAttribute("aria-expanded", "true");
+  }
+  function closeSidebar() {
+    if (!sidebar) return;
+    sidebar.classList.remove("is-open");
+    if (sidebarBackdrop) sidebarBackdrop.classList.remove("is-visible");
+    if (topbarMenu) topbarMenu.setAttribute("aria-expanded", "false");
+  }
+  function toggleSidebar() {
+    if (sidebar && sidebar.classList.contains("is-open")) closeSidebar();
+    else openSidebar();
+  }
+
+  if (topbarMenu) topbarMenu.addEventListener("click", toggleSidebar);
+  if (bottomNavMore) bottomNavMore.addEventListener("click", toggleSidebar);
+  if (sidebarBackdrop) sidebarBackdrop.addEventListener("click", closeSidebar);
+  if (sidebar) {
+    sidebar.querySelectorAll("a").forEach(function (a) {
+      a.addEventListener("click", closeSidebar);
+    });
+  }
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && sidebar && sidebar.classList.contains("is-open")) closeSidebar();
+  });
+
+  // ---------------------------------------------------------------
+  // active-section highlighting (sidebar + bottom nav share data-nav)
+  // ---------------------------------------------------------------
+  var navLinks = document.querySelectorAll("[data-nav]");
+  var sections = document.querySelectorAll(".ws-section[id]");
+  if (hasIO && sections.length) {
+    var navObserver = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          var id = entry.target.id;
+          navLinks.forEach(function (link) {
+            link.classList.toggle("is-active", link.getAttribute("data-nav") === id);
+          });
+        });
+      },
+      { rootMargin: "-35% 0px -55% 0px", threshold: 0 }
+    );
+    sections.forEach(function (s) {
+      navObserver.observe(s);
+    });
+  }
+
+  // ---------------------------------------------------------------
+  // smooth scroll (Lenis)
   // ---------------------------------------------------------------
   var lenisInstance = null;
   if (hasLenis && !reduceMotion) {
     lenisInstance = new Lenis({ autoRaf: true, anchors: true, lerp: 0.11 });
   }
 
+  function goTo(hash) {
+    var target = document.querySelector(hash);
+    if (!target) return;
+    if (lenisInstance) lenisInstance.scrollTo(target);
+    else target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+  }
+
   // ---------------------------------------------------------------
   // scroll reveal
-  // anime.js when available (scroll-linked, staggered, eased);
-  // IntersectionObserver fallback otherwise; instant show if neither
-  // or reduced-motion is on. Whatever path runs, content always ends
-  // up visible — never stuck hidden.
   // ---------------------------------------------------------------
   function revealGroup(targets, opts) {
     opts = opts || {};
@@ -59,8 +121,8 @@ document.documentElement.classList.remove("no-js");
 
       anime.animate(els, {
         opacity: [0, 1],
-        translateY: [26, 0],
-        duration: 850,
+        translateY: [24, 0],
+        duration: 800,
         ease: "outExpo",
         delay: opts.stagger ? anime.stagger(opts.stagger) : 0,
         autoplay: anime.onScroll(onScrollParams),
@@ -94,133 +156,53 @@ document.documentElement.classList.remove("no-js");
     }
   }
 
-  // standalone reveals
-  document.querySelectorAll(".cmd-block.reveal, .subhead.reveal, .json-block.reveal, .credentials.reveal, .contact__lede.reveal, .contact__links.reveal").forEach(function (el) {
+  document.querySelectorAll(".card.reveal, .skill-group.reveal, .credentials.reveal, .status-grid.reveal, .term--contact.reveal").forEach(function (el) {
     revealGroup(el);
   });
 
-  // project cards: stagger per grid, triggered off the grid itself
-  document.querySelectorAll(".grid").forEach(function (grid) {
-    var cards = grid.querySelectorAll(".card.reveal");
-    revealGroup(cards, { stagger: 90, trigger: grid });
-  });
-
-  // timeline items: each triggers independently as it scrolls into view
-  document.querySelectorAll(".timeline__item.reveal").forEach(function (item) {
+  document.querySelectorAll(".gitlog__item.reveal").forEach(function (item) {
     revealGroup(item);
   });
 
-  // ---------------------------------------------------------------
-  // hero sequence — type the prompt like you just asked Claude Code
-  // about him, show a "thinking" beat, then stream the tool-call
-  // response in. Escape skips the thinking beat, same as the CLI.
-  // ---------------------------------------------------------------
-  var responseChildren = document.querySelectorAll(".hero .response > *");
+  document.querySelectorAll(".repo-grid").forEach(function (grid) {
+    var cards = grid.querySelectorAll(".repo-card.reveal");
+    revealGroup(cards, { stagger: 80, trigger: grid });
+  });
 
-  function revealHeroResponse() {
-    if (hasAnime && !reduceMotion && responseChildren.length) {
-      anime.animate(responseChildren, {
+  // ---------------------------------------------------------------
+  // hero entrance
+  // ---------------------------------------------------------------
+  ["term__block", "term__chips", "hero__actions"].forEach(function (cls, i) {
+    var el = document.querySelector(".hero ." + cls);
+    if (!el) return;
+    if (hasAnime && !reduceMotion) {
+      anime.animate(el, {
         opacity: [0, 1],
         translateY: [16, 0],
         duration: 700,
         ease: "outExpo",
-        delay: anime.stagger(70),
+        delay: 220 + i * 260,
       });
     } else {
-      responseChildren.forEach(function (el) {
-        el.style.opacity = "1";
-        el.style.transform = "none";
-      });
+      el.style.opacity = "1";
+      el.style.transform = "none";
     }
-  }
-
-  function startThinking(onDone) {
-    var thinkingEl = document.getElementById("thinking");
-    if (!thinkingEl) {
-      onDone();
-      return;
-    }
-    var spinnerEl = thinkingEl.querySelector("[data-spinner]");
-    var verbEl = thinkingEl.querySelector("[data-thinking-verb]");
-    var elapsedEl = thinkingEl.querySelector("[data-elapsed]");
-
-    thinkingEl.classList.add("is-active");
-
-    var frames = ["✻", "✼", "✶", "✷", "✳"];
-    var verbs = ["Noodling…", "Percolating…", "Synthesizing…", "Reticulating…", "Pondering…"];
-    if (verbEl) verbEl.textContent = verbs[Math.floor(Math.random() * verbs.length)];
-
-    var frame = 0;
-    var spinTimer = setInterval(function () {
-      frame = (frame + 1) % frames.length;
-      if (spinnerEl) spinnerEl.textContent = frames[frame];
-    }, 90);
-
-    var elapsed = 0;
-    var elapsedTimer = setInterval(function () {
-      elapsed++;
-      if (elapsedEl) elapsedEl.textContent = elapsed;
-    }, 1000);
-
-    var done = false;
-    function finish() {
-      if (done) return;
-      done = true;
-      clearInterval(spinTimer);
-      clearInterval(elapsedTimer);
-      thinkingEl.classList.remove("is-active");
-      document.removeEventListener("keydown", onEscape);
-      onDone();
-    }
-    function onEscape(e) {
-      if (e.key === "Escape") finish();
-    }
-    document.addEventListener("keydown", onEscape);
-
-    setTimeout(finish, 1200);
-  }
-
-  var promptEl = document.querySelector("[data-typed-prompt]");
-  var promptCursor = document.querySelector("[data-prompt-cursor]");
-
-  if (promptEl) {
-    var promptText = promptEl.textContent;
-    if (reduceMotion) {
-      promptEl.textContent = promptText;
-      if (promptCursor) promptCursor.style.display = "none";
-      revealHeroResponse();
-    } else {
-      promptEl.textContent = "";
-      var pi = 0;
-      (function typePrompt() {
-        promptEl.textContent = promptText.slice(0, pi);
-        pi++;
-        if (pi <= promptText.length) {
-          setTimeout(typePrompt, 45);
-        } else {
-          if (promptCursor) promptCursor.style.display = "none";
-          startThinking(revealHeroResponse);
-        }
-      })();
-    }
-  } else {
-    revealHeroResponse();
-  }
+  });
 
   // ---------------------------------------------------------------
-  // card tilt-toward-cursor
+  // repo card tilt + magnetic buttons
   // ---------------------------------------------------------------
   if (hasAnime && !reduceMotion && window.matchMedia("(hover: hover)").matches) {
     var spring = anime.spring({ stiffness: 260, damping: 22, mass: 1 });
 
-    document.querySelectorAll(".card").forEach(function (card) {
+    document.querySelectorAll(".repo-card").forEach(function (card) {
       card.addEventListener("mousemove", function (e) {
         var rect = card.getBoundingClientRect();
         var px = (e.clientX - rect.left) / rect.width - 0.5;
         var py = (e.clientY - rect.top) / rect.height - 0.5;
         anime.animate(card, {
-          rotateX: py * -6,
-          rotateY: px * 6,
+          rotateX: py * -5,
+          rotateY: px * 5,
           translateY: -3,
           duration: 400,
           ease: "outQuad",
@@ -228,193 +210,53 @@ document.documentElement.classList.remove("no-js");
       });
       card.style.transformPerspective = "700px";
       card.addEventListener("mouseleave", function () {
-        anime.animate(card, {
-          rotateX: 0,
-          rotateY: 0,
-          translateY: 0,
-          duration: 900,
-          ease: spring,
-        });
+        anime.animate(card, { rotateX: 0, rotateY: 0, translateY: 0, duration: 900, ease: spring });
       });
     });
 
-    // magnetic buttons
     document.querySelectorAll(".btn").forEach(function (btn) {
       btn.addEventListener("mousemove", function (e) {
         var rect = btn.getBoundingClientRect();
         var mx = e.clientX - (rect.left + rect.width / 2);
         var my = e.clientY - (rect.top + rect.height / 2);
-        anime.animate(btn, {
-          translateX: mx * 0.25,
-          translateY: my * 0.35,
-          duration: 300,
-          ease: "outQuad",
-        });
+        anime.animate(btn, { translateX: mx * 0.2, translateY: my * 0.3, duration: 300, ease: "outQuad" });
       });
       btn.addEventListener("mouseleave", function () {
-        anime.animate(btn, {
-          translateX: 0,
-          translateY: 0,
-          duration: 700,
-          ease: spring,
-        });
+        anime.animate(btn, { translateX: 0, translateY: 0, duration: 700, ease: spring });
       });
     });
   }
 
   // ---------------------------------------------------------------
-  // hero background — an animated knowledge graph. Nodes drift and
-  // pulse, edges connect nearby nodes. It's decorative, but the
-  // subject is literally knowledge graphs, so the background is the
-  // thing he does for a living, not a stock particle effect.
+  // command palette (Ctrl+K / Cmd+K / "/")
   // ---------------------------------------------------------------
-  (function initGraph() {
-    var canvas = document.getElementById("graph-canvas");
-    if (!canvas) return;
-    var ctx = canvas.getContext("2d");
-    var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var w = 0,
-      h = 0,
-      nodes = [],
-      raf = null;
-    var NODE_COUNT = window.innerWidth < 640 ? 10 : 16;
-    var LINK_DIST = 170;
+  (function initCmdk() {
+    var cmdk = document.getElementById("cmdk");
+    var input = document.getElementById("cmdk-input");
+    var list = document.getElementById("cmdk-list");
+    if (!cmdk || !input || !list) return;
 
-    function hexToRgb(hex) {
-      hex = hex.replace("#", "");
-      if (hex.length === 3) {
-        hex = hex
-          .split("")
-          .map(function (c) {
-            return c + c;
-          })
-          .join("");
-      }
-      var num = parseInt(hex, 16);
-      return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
-    }
-
-    var accentVar = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim();
-    var rgb = hexToRgb(accentVar || "#57c7b8");
-
-    function resize() {
-      var rect = canvas.parentElement.getBoundingClientRect();
-      w = rect.width;
-      h = rect.height;
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
-      canvas.style.width = w + "px";
-      canvas.style.height = h + "px";
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-
-    function makeNodes() {
-      nodes = [];
-      for (var n = 0; n < NODE_COUNT; n++) {
-        nodes.push({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          vx: (Math.random() - 0.5) * 0.22,
-          vy: (Math.random() - 0.5) * 0.22,
-          r: 1.6 + Math.random() * 1.8,
-          phase: Math.random() * Math.PI * 2,
-        });
-      }
-    }
-
-    resize();
-    makeNodes();
-
-    var resizeTimer;
-    window.addEventListener("resize", function () {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(function () {
-        resize();
-        makeNodes();
-      }, 200);
-    });
-
-    var t = 0;
-    function frame() {
-      t += 0.016;
-      ctx.clearRect(0, 0, w, h);
-
-      nodes.forEach(function (n) {
-        n.x += n.vx;
-        n.y += n.vy;
-        if (n.x < 0 || n.x > w) n.vx *= -1;
-        if (n.y < 0 || n.y > h) n.vy *= -1;
-      });
-
-      for (var i = 0; i < nodes.length; i++) {
-        for (var j = i + 1; j < nodes.length; j++) {
-          var a = nodes[i],
-            b = nodes[j];
-          var dx = a.x - b.x,
-            dy = a.y - b.y;
-          var dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < LINK_DIST) {
-            var alpha = (1 - dist / LINK_DIST) * 0.35;
-            ctx.strokeStyle = "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + "," + alpha + ")";
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.stroke();
-          }
-        }
-      }
-
-      nodes.forEach(function (n) {
-        var pulse = 0.5 + 0.5 * Math.sin(t * 0.8 + n.phase);
-        ctx.beginPath();
-        ctx.fillStyle = "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + "," + (0.35 + pulse * 0.45) + ")";
-        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fill();
-      });
-
-      if (!reduceMotion) raf = requestAnimationFrame(frame);
-    }
-
-    frame();
-
-    if (!reduceMotion) {
-      document.addEventListener("visibilitychange", function () {
-        if (document.hidden) {
-          cancelAnimationFrame(raf);
-        } else {
-          raf = requestAnimationFrame(frame);
-        }
-      });
-    }
-  })();
-
-  // ---------------------------------------------------------------
-  // command bar — a real router, not decoration. Type "projects" or
-  // "resume" and hit enter; it navigates or downloads, same way you'd
-  // drive Claude Code from its prompt.
-  // ---------------------------------------------------------------
-  (function initCmdbar() {
-    var form = document.getElementById("cmdbar-form");
-    var input = document.getElementById("cmdbar-input");
-    var responseEl = document.getElementById("cmdbar-response");
-    if (!form || !input) return;
-
-    function goTo(hash, label) {
-      var target = document.querySelector(hash);
-      if (target) {
-        if (lenisInstance) {
-          lenisInstance.scrollTo(target);
-        } else {
-          target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
-        }
-      }
-      return "⏺ Navigating to " + label;
-    }
-
-    var routes = [
+    var items = [
+      { label: "Home", hint: "whoami", icon: "house", action: function () { goTo("#hero"); } },
+      { label: "About", hint: "about.md", icon: "user", action: function () { goTo("#about"); } },
+      { label: "Experience", hint: "experience.log", icon: "briefcase", action: function () { goTo("#experience"); } },
+      { label: "Skills", hint: "skills.json", icon: "terminal", action: function () { goTo("#skills"); } },
+      { label: "Projects", hint: "projects/", icon: "folder-git-2", action: function () { goTo("#projects"); } },
+      { label: "AI Workspace", hint: "ai-workspace/", icon: "bot", action: function () { goTo("#ai-workspace"); } },
+      { label: "Blogs", hint: "blogs/", icon: "book-open", action: function () { goTo("#blogs"); } },
+      { label: "Contact", hint: "contact.sh", icon: "mail", action: function () { goTo("#contact"); } },
       {
-        pattern: /resume|cv|download/i,
+        label: "Toggle theme",
+        hint: "dark / light",
+        icon: "sun",
+        action: function () {
+          if (themeToggle) themeToggle.click();
+        },
+      },
+      {
+        label: "Download résumé",
+        hint: "PDF",
+        icon: "download",
         action: function () {
           var a = document.createElement("a");
           a.href = "/assets/Utpal_Das_Resume.pdf";
@@ -422,46 +264,113 @@ document.documentElement.classList.remove("no-js");
           document.body.appendChild(a);
           a.click();
           a.remove();
-          return "⏺ Downloading résumé…";
         },
       },
-      { pattern: /project|work|build|ship|portfolio/i, action: function () { return goTo("#projects", "projects"); } },
-      { pattern: /experience|job|career|history|deloitte|pfizer|allianz/i, action: function () { return goTo("#experience", "experience"); } },
-      { pattern: /skill|stack|tech|language/i, action: function () { return goTo("#skills", "skills"); } },
-      { pattern: /whoami|who are you|about/i, action: function () { return goTo("#whoami", "whoami"); } },
-      { pattern: /contact|email|hire|reach|talk|linkedin/i, action: function () { return goTo("#contact", "contact"); } },
-      { pattern: /hi|hello|hey/i, action: function () { return goTo("#contact", "contact — say hello"); } },
+      { label: "Open GitHub", hint: "↗", icon: "external-link", action: function () { window.open("https://github.com/UtpalDas6", "_blank", "noopener"); } },
+      { label: "Open LinkedIn", hint: "↗", icon: "external-link", action: function () { window.open("https://www.linkedin.com/in/utpal-das-b63671126/", "_blank", "noopener"); } },
+      { label: "Open Twitter / X", hint: "↗", icon: "external-link", action: function () { window.open("https://twitter.com/Utpal20386592", "_blank", "noopener"); } },
+      { label: "Open YouTube", hint: "↗", icon: "external-link", action: function () { window.open("https://www.youtube.com/channel/UC1tb2a-2j_BoWt7tAMlE1iw/featured", "_blank", "noopener"); } },
     ];
 
-    var responseTimer;
-    function showResponse(text) {
-      if (!responseEl) return;
-      responseEl.textContent = text;
-      responseEl.classList.add("is-visible");
-      clearTimeout(responseTimer);
-      responseTimer = setTimeout(function () {
-        responseEl.classList.remove("is-visible");
-      }, 2600);
+    var activeIndex = 0;
+    var filtered = items;
+
+    function render() {
+      list.innerHTML = "";
+      if (!filtered.length) {
+        var empty = document.createElement("li");
+        empty.className = "cmdk__empty";
+        empty.textContent = "No matching commands.";
+        list.appendChild(empty);
+        return;
+      }
+      filtered.forEach(function (item, i) {
+        var li = document.createElement("li");
+        li.className = "cmdk__item" + (i === activeIndex ? " is-active" : "");
+        li.setAttribute("role", "option");
+        li.innerHTML =
+          '<svg class="icon" aria-hidden="true"><use href="#icon-' + item.icon + '"></use></svg>' +
+          "<span>" + item.label + "</span>" +
+          '<span class="cmdk__item-hint">' + item.hint + "</span>";
+        li.addEventListener("mouseenter", function () {
+          activeIndex = i;
+          render();
+        });
+        li.addEventListener("click", function () {
+          runActive();
+        });
+        list.appendChild(li);
+      });
     }
 
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var value = input.value.trim();
-      if (!value) return;
-      var matched = routes.find(function (r) {
-        return r.pattern.test(value);
-      });
-      var reply = matched ? matched.action() : "Try asking about his projects, experience, skills, or how to reach him.";
-      showResponse(reply);
+    function runActive() {
+      var item = filtered[activeIndex];
+      if (!item) return;
+      close();
+      item.action();
+    }
+
+    function filterItems() {
+      var q = input.value.trim().toLowerCase();
+      filtered = !q
+        ? items
+        : items.filter(function (item) {
+            return item.label.toLowerCase().indexOf(q) !== -1 || item.hint.toLowerCase().indexOf(q) !== -1;
+          });
+      activeIndex = 0;
+      render();
+    }
+
+    function open() {
+      cmdk.hidden = false;
       input.value = "";
+      filterItems();
+      setTimeout(function () {
+        input.focus();
+      }, 10);
+    }
+
+    function close() {
+      cmdk.hidden = true;
+    }
+
+    document.querySelectorAll("[data-cmdk-close]").forEach(function (el) {
+      el.addEventListener("click", close);
+    });
+
+    var cmdkTrigger = document.getElementById("cmdk-trigger");
+    var topbarCmdk = document.getElementById("topbar-cmdk");
+    if (cmdkTrigger) cmdkTrigger.addEventListener("click", open);
+    if (topbarCmdk) topbarCmdk.addEventListener("click", open);
+
+    input.addEventListener("input", filterItems);
+
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        activeIndex = Math.min(activeIndex + 1, filtered.length - 1);
+        render();
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        activeIndex = Math.max(activeIndex - 1, 0);
+        render();
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        runActive();
+      } else if (e.key === "Escape") {
+        close();
+      }
     });
 
     document.addEventListener("keydown", function (e) {
-      if (e.key !== "/") return;
-      var tag = document.activeElement && document.activeElement.tagName;
-      if (tag === "INPUT" || tag === "TEXTAREA") return;
-      e.preventDefault();
-      input.focus();
+      var metaK = (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k";
+      var slash = e.key === "/" && document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA";
+      if (metaK || slash) {
+        e.preventDefault();
+        if (cmdk.hidden) open();
+        else close();
+      }
+      if (e.key === "Escape" && !cmdk.hidden) close();
     });
   })();
 })();
