@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -48,6 +48,8 @@
 
   <!-- HERO -->
   <section class="hero" id="whoami">
+    <canvas class="hero__graph" id="graph-canvas" aria-hidden="true"></canvas>
+    <div class="hero__inner">
     <div class="term">
       <p class="term__line"><span class="prompt">$</span> whoami</p>
       <h1 class="term__name" data-typed>Utpal Das</h1>
@@ -68,6 +70,7 @@
       </div>
 
       <p class="term__line term__line--gap"><span class="prompt">$</span> <span class="cursor" aria-hidden="true">▌</span></p>
+    </div>
     </div>
   </section>
 
@@ -152,26 +155,26 @@
     <div class="subhead reveal">
       <h3 class="dir">./enterprise <span class="badge">client work — architecture &amp; impact, code under NDA</span></h3>
     </div>
-    <div class="grid reveal">
-      <article class="card">
+    <div class="grid">
+      <article class="card reveal">
         <h4>Agentic Data Migration Platform</h4>
         <p class="card__client">Allianz</p>
         <p>Six orchestrated Claude Code sub-agents automate a full Foundry-to-Databricks migration. Up to 90% faster, up to 95% cheaper than doing it by hand.</p>
         <p class="card__tags">Claude Code · MCP · Databricks · Foundry</p>
       </article>
-      <article class="card">
+      <article class="card reveal">
         <h4>Oncoscout</h4>
         <p class="card__client">Pfizer Oncology</p>
         <p>Knowledge-graph chat with single- and multi-hop retrieval, synonym lookup, and multi-modal document ingestion.</p>
         <p class="card__tags">Neo4j · Cypher · Hybrid RAG</p>
       </article>
-      <article class="card">
+      <article class="card reveal">
         <h4>Constellation</h4>
         <p class="card__client">Pfizer</p>
         <p>Enterprise RAG platform for Q&amp;A, search, and summarization. RAGAs eval gate, ~2,000+ queries/day at ~99.5%+ uptime.</p>
         <p class="card__tags">FastAPI · LangChain · AWS · Docker</p>
       </article>
-      <article class="card">
+      <article class="card reveal">
         <h4>Mapii</h4>
         <p class="card__client">Pfizer Oncology</p>
         <p>Configurable chat and temperature controls, plus the evaluation that got clusterRAG/graphRAG adopted as the next retrieval architecture.</p>
@@ -182,8 +185,8 @@
     <div class="subhead reveal">
       <h3 class="dir">./personal <span class="badge badge--live">nights &amp; weekends — code is public</span></h3>
     </div>
-    <div class="grid reveal">
-      <article class="card">
+    <div class="grid">
+      <article class="card reveal">
         <h4>Agent Ops — Mission Control</h4>
         <p>Jira for AI agent fleets: natural-language briefs become tasks, a routing matrix assigns the model by criticality × size, and a kanban board tracks them live.</p>
         <p class="card__tags">Node.js · Claude Code · LLM routing</p>
@@ -192,7 +195,7 @@
           <a href="https://github.com/UtpalDas6/agent-ops" target="_blank" rel="noopener">Code ↗</a>
         </div>
       </article>
-      <article class="card">
+      <article class="card reveal">
         <h4>Rock · Paper · Scissors — 3D Multiplayer</h4>
         <p>Real-time 3D multiplayer, built on Three.js with zero build step. Procedural geometry, synced countdown, a small WebSocket relay for cross-device play.</p>
         <p class="card__tags">Three.js · WebSockets · Web Audio</p>
@@ -201,7 +204,7 @@
           <a href="https://github.com/UtpalDas6/Rock-Paper-Scissor" target="_blank" rel="noopener">Code ↗</a>
         </div>
       </article>
-      <article class="card">
+      <article class="card reveal">
         <h4>ascii_image</h4>
         <p>Drop an image in, get ASCII art out — entirely in the browser, no server round-trip.</p>
         <p class="card__tags">JavaScript · Image processing</p>
@@ -210,7 +213,7 @@
           <a href="https://github.com/UtpalDas6/ascii_image" target="_blank" rel="noopener">Code ↗</a>
         </div>
       </article>
-      <article class="card">
+      <article class="card reveal">
         <h4>pyStocks+</h4>
         <p>A BUY/SELL/HOLD signal derived from live NSE promoter-shareholding trends, with manual fallback when NSE rate-limits a lookup.</p>
         <p class="card__tags">Python · Flask · NSE data</p>
@@ -270,6 +273,8 @@
   <p>© <span data-year></span> Utpal Das. Built with Claude Code — no framework, no build step, just HTML, CSS, and a little JS. <a href="https://github.com/UtpalDas6/UtpalDas6.github.io" target="_blank" rel="noopener">view source ↗</a></p>
 </footer>
 
+<script src="/vendor/lenis.min.js"></script>
+<script src="/vendor/anime.min.js"></script>
 <script src="/script.js"></script>
 </body>
 </html>

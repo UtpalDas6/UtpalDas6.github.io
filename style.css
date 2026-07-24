@@ -33,6 +33,20 @@ html {
   scroll-behavior: smooth;
 }
 
+/* JS-driven entrance/reveal states. .no-js is removed by script.js as its
+   first statement; if JS never runs, this forces everything visible instead
+   of leaving content stuck hidden. */
+.hero .term > * {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.no-js .hero .term > *,
+.no-js .reveal {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -207,9 +221,26 @@ h4 {
 /* ---------- hero / terminal ---------- */
 
 .hero {
-  padding: clamp(64px, 12vh, 120px) var(--edge) 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero__graph {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 0;
+  opacity: 0.65;
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 1;
   max-width: 1100px;
   margin: 0 auto;
+  padding: clamp(64px, 12vh, 120px) var(--edge) 80px;
 }
 
 .term {
@@ -281,6 +312,7 @@ h4 {
 }
 
 .btn {
+  display: inline-block;
   font-family: var(--font-mono);
   font-size: 0.92rem;
   border: 1px solid var(--border-strong);
@@ -288,6 +320,7 @@ h4 {
   padding: 11px 18px;
   color: var(--text);
   transition: border-color 0.15s ease, background 0.15s ease;
+  will-change: transform;
 }
 
 .btn:hover {
@@ -462,12 +495,16 @@ h4 {
   border-left: 3px solid var(--border-strong);
   border-radius: 6px;
   padding: 22px 24px;
-  transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  will-change: transform;
 }
 
 .card:hover {
   border-left-color: var(--accent);
   background: var(--bg-raised-2);
+}
+
+.no-js .card:hover {
   transform: translateY(-2px);
 }
 
