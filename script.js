@@ -36,8 +36,9 @@ document.documentElement.classList.remove("no-js");
   // smooth scroll (Lenis) — scrolls the real document, so native
   // scroll events & anime's scroll observer keep working untouched
   // ---------------------------------------------------------------
+  var lenisInstance = null;
   if (hasLenis && !reduceMotion) {
-    new Lenis({ autoRaf: true, anchors: true, lerp: 0.11 });
+    lenisInstance = new Lenis({ autoRaf: true, anchors: true, lerp: 0.11 });
   }
 
   // ---------------------------------------------------------------
@@ -94,7 +95,7 @@ document.documentElement.classList.remove("no-js");
   }
 
   // standalone reveals
-  document.querySelectorAll(".cmd.reveal, .subhead.reveal, .json-block.reveal, .credentials.reveal, .contact__lede.reveal, .contact__links.reveal").forEach(function (el) {
+  document.querySelectorAll(".cmd-block.reveal, .subhead.reveal, .json-block.reveal, .credentials.reveal, .contact__lede.reveal, .contact__links.reveal").forEach(function (el) {
     revealGroup(el);
   });
 
@@ -110,42 +111,100 @@ document.documentElement.classList.remove("no-js");
   });
 
   // ---------------------------------------------------------------
-  // hero entrance
+  // hero sequence — type the prompt like you just asked Claude Code
+  // about him, show a "thinking" beat, then stream the tool-call
+  // response in. Escape skips the thinking beat, same as the CLI.
   // ---------------------------------------------------------------
-  var heroChildren = document.querySelectorAll(".hero .term > *");
-  if (hasAnime && !reduceMotion && heroChildren.length) {
-    anime.animate(heroChildren, {
-      opacity: [0, 1],
-      translateY: [16, 0],
-      duration: 700,
-      ease: "outExpo",
-      delay: anime.stagger(70),
-    });
-  } else {
-    heroChildren.forEach(function (el) {
-      el.style.opacity = "1";
-      el.style.transform = "none";
-    });
+  var responseChildren = document.querySelectorAll(".hero .response > *");
+
+  function revealHeroResponse() {
+    if (hasAnime && !reduceMotion && responseChildren.length) {
+      anime.animate(responseChildren, {
+        opacity: [0, 1],
+        translateY: [16, 0],
+        duration: 700,
+        ease: "outExpo",
+        delay: anime.stagger(70),
+      });
+    } else {
+      responseChildren.forEach(function (el) {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      });
+    }
   }
 
-  // hero name typewriter
-  var typedEl = document.querySelector("[data-typed]");
-  if (typedEl) {
-    var fullText = typedEl.textContent;
-    if (reduceMotion) {
-      typedEl.textContent = fullText;
-    } else {
-      typedEl.textContent = "";
-      var i = 0;
-      var tick = function () {
-        typedEl.textContent = fullText.slice(0, i);
-        i++;
-        if (i <= fullText.length) {
-          setTimeout(tick, 55);
-        }
-      };
-      tick();
+  function startThinking(onDone) {
+    var thinkingEl = document.getElementById("thinking");
+    if (!thinkingEl) {
+      onDone();
+      return;
     }
+    var spinnerEl = thinkingEl.querySelector("[data-spinner]");
+    var verbEl = thinkingEl.querySelector("[data-thinking-verb]");
+    var elapsedEl = thinkingEl.querySelector("[data-elapsed]");
+
+    thinkingEl.classList.add("is-active");
+
+    var frames = ["✻", "✼", "✶", "✷", "✳"];
+    var verbs = ["Noodling…", "Percolating…", "Synthesizing…", "Reticulating…", "Pondering…"];
+    if (verbEl) verbEl.textContent = verbs[Math.floor(Math.random() * verbs.length)];
+
+    var frame = 0;
+    var spinTimer = setInterval(function () {
+      frame = (frame + 1) % frames.length;
+      if (spinnerEl) spinnerEl.textContent = frames[frame];
+    }, 90);
+
+    var elapsed = 0;
+    var elapsedTimer = setInterval(function () {
+      elapsed++;
+      if (elapsedEl) elapsedEl.textContent = elapsed;
+    }, 1000);
+
+    var done = false;
+    function finish() {
+      if (done) return;
+      done = true;
+      clearInterval(spinTimer);
+      clearInterval(elapsedTimer);
+      thinkingEl.classList.remove("is-active");
+      document.removeEventListener("keydown", onEscape);
+      onDone();
+    }
+    function onEscape(e) {
+      if (e.key === "Escape") finish();
+    }
+    document.addEventListener("keydown", onEscape);
+
+    setTimeout(finish, 1200);
+  }
+
+  var promptEl = document.querySelector("[data-typed-prompt]");
+  var promptCursor = document.querySelector("[data-prompt-cursor]");
+
+  if (promptEl) {
+    var promptText = promptEl.textContent;
+    if (reduceMotion) {
+      promptEl.textContent = promptText;
+      if (promptCursor) promptCursor.style.display = "none";
+      revealHeroResponse();
+    } else {
+      promptEl.textContent = "";
+      var pi = 0;
+      (function typePrompt() {
+        promptEl.textContent = promptText.slice(0, pi);
+        pi++;
+        if (pi <= promptText.length) {
+          setTimeout(typePrompt, 45);
+        } else {
+          if (promptCursor) promptCursor.style.display = "none";
+          startThinking(revealHeroResponse);
+        }
+      })();
+    }
+  } else {
+    revealHeroResponse();
   }
 
   // ---------------------------------------------------------------
@@ -328,5 +387,81 @@ document.documentElement.classList.remove("no-js");
         }
       });
     }
+  })();
+
+  // ---------------------------------------------------------------
+  // command bar — a real router, not decoration. Type "projects" or
+  // "resume" and hit enter; it navigates or downloads, same way you'd
+  // drive Claude Code from its prompt.
+  // ---------------------------------------------------------------
+  (function initCmdbar() {
+    var form = document.getElementById("cmdbar-form");
+    var input = document.getElementById("cmdbar-input");
+    var responseEl = document.getElementById("cmdbar-response");
+    if (!form || !input) return;
+
+    function goTo(hash, label) {
+      var target = document.querySelector(hash);
+      if (target) {
+        if (lenisInstance) {
+          lenisInstance.scrollTo(target);
+        } else {
+          target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+        }
+      }
+      return "⏺ Navigating to " + label;
+    }
+
+    var routes = [
+      {
+        pattern: /resume|cv|download/i,
+        action: function () {
+          var a = document.createElement("a");
+          a.href = "/assets/Utpal_Das_Resume.pdf";
+          a.download = "";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          return "⏺ Downloading résumé…";
+        },
+      },
+      { pattern: /project|work|build|ship|portfolio/i, action: function () { return goTo("#projects", "projects"); } },
+      { pattern: /experience|job|career|history|deloitte|pfizer|allianz/i, action: function () { return goTo("#experience", "experience"); } },
+      { pattern: /skill|stack|tech|language/i, action: function () { return goTo("#skills", "skills"); } },
+      { pattern: /whoami|who are you|about/i, action: function () { return goTo("#whoami", "whoami"); } },
+      { pattern: /contact|email|hire|reach|talk|linkedin/i, action: function () { return goTo("#contact", "contact"); } },
+      { pattern: /hi|hello|hey/i, action: function () { return goTo("#contact", "contact — say hello"); } },
+    ];
+
+    var responseTimer;
+    function showResponse(text) {
+      if (!responseEl) return;
+      responseEl.textContent = text;
+      responseEl.classList.add("is-visible");
+      clearTimeout(responseTimer);
+      responseTimer = setTimeout(function () {
+        responseEl.classList.remove("is-visible");
+      }, 2600);
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var value = input.value.trim();
+      if (!value) return;
+      var matched = routes.find(function (r) {
+        return r.pattern.test(value);
+      });
+      var reply = matched ? matched.action() : "Try asking about his projects, experience, skills, or how to reach him.";
+      showResponse(reply);
+      input.value = "";
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "/") return;
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
+      e.preventDefault();
+      input.focus();
+    });
   })();
 })();

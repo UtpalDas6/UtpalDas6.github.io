@@ -37,12 +37,12 @@ html {
 /* JS-driven entrance/reveal states. .no-js is removed by script.js as its
    first statement; if JS never runs, this forces everything visible instead
    of leaving content stuck hidden. */
-.hero .term > * {
+.hero .response > * {
   opacity: 0;
   transform: translateY(16px);
 }
 
-.no-js .hero .term > *,
+.no-js .hero .response > *,
 .no-js .reveal {
   opacity: 1 !important;
   transform: none !important;
@@ -269,6 +269,80 @@ h4 {
   font-weight: 400;
 }
 
+/* ---------- Claude Code vocabulary: prompt line, thinking, tool calls, todos ---------- */
+
+.term__prompt-line {
+  margin: 0 0 22px;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.chevron {
+  color: var(--accent);
+  font-weight: 700;
+  margin-right: 8px;
+}
+
+.thinking {
+  display: none;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 22px;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.thinking.is-active {
+  display: flex;
+}
+
+.thinking__spinner {
+  color: var(--accent);
+  display: inline-block;
+  width: 1em;
+}
+
+.tool-call {
+  margin: 0 0 6px;
+  font-size: 0.92rem;
+  color: var(--text);
+}
+
+.bullet {
+  color: var(--accent);
+  margin-right: 6px;
+}
+
+.tool-name {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.tool-result {
+  margin: 0 0 18px;
+  padding-left: 20px;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.todo-list {
+  margin: 2px 0 18px;
+  padding-left: 20px;
+}
+
+.todo-item {
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 2vw, 1.05rem);
+  margin: 5px 0;
+  color: var(--text);
+}
+
+.todo-check {
+  color: var(--ok);
+  font-family: var(--font-mono);
+  margin-right: 9px;
+}
+
 .term__name {
   font-size: clamp(2.6rem, 8vw, 5rem);
   line-height: 1.02;
@@ -285,12 +359,6 @@ h4 {
 
 .term__out--dim {
   color: var(--text-dim);
-}
-
-.ok {
-  color: var(--ok);
-  font-family: var(--font-mono);
-  margin-right: 6px;
 }
 
 .cursor {
@@ -351,13 +419,17 @@ h4 {
   border-top: 1px solid var(--border);
 }
 
-.cmd {
-  font-size: clamp(1.1rem, 2.4vw, 1.4rem);
+.cmd-block {
   margin-bottom: 36px;
 }
 
-.cmd--tight {
+.cmd-block--tight {
   margin-top: 56px;
+}
+
+.cmd {
+  font-size: clamp(1.1rem, 2.4vw, 1.4rem);
+  margin-bottom: 6px;
 }
 
 .reveal {
@@ -430,13 +502,26 @@ h4 {
 }
 
 .timeline__item ul {
+  list-style: none;
   margin: 0;
-  padding-left: 20px;
+  padding-left: 0;
 }
 
 .timeline__item li {
+  position: relative;
   margin-bottom: 8px;
+  padding-left: 22px;
   color: var(--text-dim);
+}
+
+.timeline__item li::before {
+  content: "+";
+  position: absolute;
+  left: 2px;
+  top: 0;
+  color: var(--ok);
+  font-family: var(--font-mono);
+  font-weight: 700;
 }
 
 .timeline__item li strong {
@@ -645,6 +730,7 @@ h4 {
   padding: 26px var(--edge) 40px;
   max-width: 1100px;
   margin: 0 auto;
+  margin-bottom: 76px;
 }
 
 .footer p {
@@ -656,4 +742,90 @@ h4 {
 
 .footer a {
   color: var(--text-dim);
+}
+
+/* ---------- command bar ---------- */
+
+.cmdbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  padding: 14px var(--edge) 16px;
+  background: linear-gradient(to top, var(--bg) 55%, transparent);
+}
+
+.cmdbar__response {
+  max-width: 700px;
+  margin: 0 auto 8px;
+  padding: 0 4px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--accent);
+  min-height: 1.2em;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cmdbar__response.is-visible {
+  opacity: 1;
+}
+
+.cmdbar__row {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  padding: 12px 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+.cmdbar__row:focus-within {
+  border-color: var(--accent);
+}
+
+.cmdbar__prompt {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  flex: none;
+}
+
+.cmdbar__input {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  background: none;
+  border: 0;
+  outline: 0;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.92rem;
+}
+
+.cmdbar__input::placeholder {
+  color: var(--text-dim);
+}
+
+.cmdbar__hint {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+@media (max-width: 640px) {
+  .cmdbar__hint {
+    display: none;
+  }
 }

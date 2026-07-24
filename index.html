@@ -51,32 +51,45 @@
     <canvas class="hero__graph" id="graph-canvas" aria-hidden="true"></canvas>
     <div class="hero__inner">
     <div class="term">
-      <p class="term__line"><span class="prompt">$</span> whoami</p>
-      <h1 class="term__name" data-typed>Utpal Das</h1>
+      <p class="term__prompt-line"><span class="chevron">&gt;</span><span data-typed-prompt>tell me about Utpal Das</span><span class="cursor" data-prompt-cursor aria-hidden="true">▌</span></p>
 
-      <p class="term__line term__line--gap"><span class="prompt">$</span> role <span class="flag">--current</span></p>
-      <p class="term__out">GenAI Engineering Manager, Deloitte India</p>
-      <p class="term__out term__out--dim">Architecting RAG, knowledge-graph, and multi-agent systems that go to production at Fortune 500 scale.</p>
-
-      <p class="term__line term__line--gap"><span class="prompt">$</span> facts <span class="flag">--headline</span></p>
-      <p class="term__out"><span class="ok">✓</span> 10+ years shipping software, from Aetna's policy UI to Allianz's agent fleets</p>
-      <p class="term__out"><span class="ok">✓</span> 4 GenAI platforms in production at Pfizer &amp; Allianz</p>
-      <p class="term__out"><span class="ok">✓</span> Still writes code every night — the projects below are the proof</p>
-
-      <div class="term__actions">
-        <a class="btn btn--primary" href="#projects">View the work →</a>
-        <a class="btn" href="/assets/Utpal_Das_Resume.pdf" download>Download résumé</a>
-        <a class="btn" href="#contact">Say hello</a>
+      <div class="thinking" id="thinking" aria-live="polite">
+        <span class="thinking__spinner" data-spinner aria-hidden="true">✻</span>
+        <span data-thinking-verb>Noodling…</span>
+        <span class="dim">(<span data-elapsed>0</span>s · esc to skip)</span>
       </div>
 
-      <p class="term__line term__line--gap"><span class="prompt">$</span> <span class="cursor" aria-hidden="true">▌</span></p>
+      <div class="response" id="hero-response">
+        <p class="tool-call"><span class="bullet">⏺</span><span class="tool-name">Read</span>(whoami)</p>
+        <h1 class="term__name">Utpal Das</h1>
+
+        <p class="tool-call term__line--gap"><span class="bullet">⏺</span><span class="tool-name">Bash</span>(role --current)</p>
+        <p class="term__out">GenAI Engineering Manager, Deloitte India</p>
+        <p class="term__out term__out--dim">Architecting RAG, knowledge-graph, and multi-agent systems that go to production at Fortune 500 scale.</p>
+
+        <p class="tool-call term__line--gap"><span class="bullet">⏺</span><span class="tool-name">Bash</span>(facts --headline)</p>
+        <div class="todo-list">
+          <p class="todo-item"><span class="todo-check">☒</span>10+ years shipping software, from Aetna's policy UI to Allianz's agent fleets</p>
+          <p class="todo-item"><span class="todo-check">☒</span>4 GenAI platforms in production at Pfizer &amp; Allianz</p>
+          <p class="todo-item"><span class="todo-check">☒</span>Still writes code every night — the projects below are the proof</p>
+        </div>
+
+        <div class="term__actions">
+          <a class="btn btn--primary" href="#projects">View the work →</a>
+          <a class="btn" href="/assets/Utpal_Das_Resume.pdf" download>Download résumé</a>
+          <a class="btn" href="#contact">Say hello</a>
+        </div>
+      </div>
     </div>
     </div>
   </section>
 
   <!-- EXPERIENCE -->
   <section class="section" id="experience">
-    <h2 class="cmd reveal">$ experience <span class="flag">--timeline --reverse-chronological</span></h2>
+    <div class="cmd-block reveal">
+      <h2 class="cmd"><span class="bullet">⏺</span><span class="tool-name">Bash</span>(experience --timeline --reverse-chronological)</h2>
+      <p class="tool-result">⎿  5 roles · 10+ years · reverse chronological</p>
+    </div>
 
     <ol class="timeline">
       <li class="timeline__item reveal">
@@ -150,7 +163,10 @@
 
   <!-- PROJECTS -->
   <section class="section" id="projects">
-    <h2 class="cmd reveal">$ ls ./projects</h2>
+    <div class="cmd-block reveal">
+      <h2 class="cmd"><span class="bullet">⏺</span><span class="tool-name">Bash</span>(ls ./projects)</h2>
+      <p class="tool-result">⎿  8 projects · 4 enterprise, 4 personal</p>
+    </div>
 
     <div class="subhead reveal">
       <h3 class="dir">./enterprise <span class="badge">client work — architecture &amp; impact, code under NDA</span></h3>
@@ -226,14 +242,20 @@
 
   <!-- SKILLS -->
   <section class="section" id="skills">
-    <h2 class="cmd reveal">$ cat skills.json</h2>
+    <div class="cmd-block reveal">
+      <h2 class="cmd"><span class="bullet">⏺</span><span class="tool-name">Read</span>(skills.json)</h2>
+      <p class="tool-result">⎿  25 skills across 3 categories</p>
+    </div>
     <pre class="json-block reveal"><code><span class="punc">{</span>
   <span class="key">"ai_llm"</span><span class="punc">:</span> <span class="str">["RAG", "GraphRAG", "Hybrid RAG", "Knowledge Graphs", "Neo4j", "Cypher", "LangChain", "LangGraph", "Multi-Agent Orchestration", "Claude Code", "MCP", "LLM Evaluation (RAGAs)"]</span><span class="punc">,</span>
   <span class="key">"platform"</span><span class="punc">:</span> <span class="str">["Python", "FastAPI", "React", "TypeScript", "AWS", "Databricks", "Postgres", "Docker"]</span><span class="punc">,</span>
   <span class="key">"leadership"</span><span class="punc">:</span> <span class="str">["Technical Program Management", "Solution Architecture", "Cross-Functional Delivery", "Stakeholder Negotiation", "Risk &amp; Launch Readiness"]</span>
 <span class="punc">}</span></code></pre>
 
-    <h2 class="cmd cmd--tight reveal">$ whoami <span class="flag">--credentials</span></h2>
+    <div class="cmd-block cmd-block--tight reveal">
+      <h2 class="cmd"><span class="bullet">⏺</span><span class="tool-name">Bash</span>(whoami --credentials)</h2>
+      <p class="tool-result">⎿  4 certifications, 1 degree</p>
+    </div>
     <div class="credentials reveal">
       <div>
         <h3 class="dir">certifications</h3>
@@ -255,7 +277,10 @@
 
   <!-- CONTACT -->
   <section class="section section--contact" id="contact">
-    <h2 class="cmd reveal">$ contact <span class="flag">--me</span></h2>
+    <div class="cmd-block reveal">
+      <h2 class="cmd"><span class="bullet">⏺</span><span class="tool-name">Bash</span>(contact --me)</h2>
+      <p class="tool-result">⎿  6 ways to reach him</p>
+    </div>
     <p class="contact__lede reveal">Hiring for GenAI, platform, TPM, or architect roles — or just want to talk knowledge graphs and chess? My terminal's always open.</p>
     <div class="contact__links reveal">
       <a class="contact__link" href="mailto:utpaldas.6osm@gmail.com">utpaldas.6osm@gmail.com</a>
@@ -272,6 +297,15 @@
 <footer class="footer">
   <p>© <span data-year></span> Utpal Das. Built with Claude Code — no framework, no build step, just HTML, CSS, and a little JS. <a href="https://github.com/UtpalDas6/UtpalDas6.github.io" target="_blank" rel="noopener">view source ↗</a></p>
 </footer>
+
+<div class="cmdbar">
+  <p class="cmdbar__response" id="cmdbar-response"></p>
+  <form class="cmdbar__row" id="cmdbar-form">
+    <span class="cmdbar__prompt">&gt;</span>
+    <input class="cmdbar__input" id="cmdbar-input" type="text" autocomplete="off" placeholder="Ask about his projects, experience, skills, or how to reach him…" aria-label="Ask about this portfolio" />
+    <span class="cmdbar__hint">↵ enter</span>
+  </form>
+</div>
 
 <script src="/vendor/lenis.min.js"></script>
 <script src="/vendor/anime.min.js"></script>
